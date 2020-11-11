@@ -1,3 +1,33 @@
 body {
+  color: #333333;
+  background-color: #AEC6CF;
   font-family: 'IBM Plex Mono', monospace;
+}
+.container {
+  max-width: 1140px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.menu {
+  display: block;
+  max-width: 100%;
+  font-size: 18px;
+  height: 60px;
+}
+.menu a {
+  line-height: 60px;
+}
+.link-left {
+  float: left;
+  padding-right: 28px;
+}
+.link-right {
+  float: right;
+  padding-left: 28px;
+}
+a {
+  color: #333333;
+  font-weight: bold;
+  font-size: 18px;
 }

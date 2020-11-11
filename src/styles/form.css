@@ -1,0 +1,47 @@
+.control-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-control {
+  display: block;
+  min-width: 320px;
+  margin-bottom: 25px;
+  padding: 8px 0px;
+  padding-left: 10px;
+  border-color: #333333;
+  border-radius: 0px;
+  transition: box-shadow 0.2s;
+  font-size: 18px;
+}
+.form-control:active, .form-control:focus {
+  border-radius: 0px;
+  outline: none;
+  transition: box-shadow 0.2s;
+  box-shadow: 6px 6px 0px #333333;
+}
+
+button, .button-default {
+  min-width: 90px;
+  padding: 6px 0px;
+  background-color: #333333;
+  color: #ffffff;
+  border-radius: 0px;
+  border-color: #333333;
+  transition: box-shadow 0.2s;
+  box-shadow: 3px 3px 0px #333333;
+}
+button:hover, .button-default:hover {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  box-shadow: 6px 6px 0px #333333;
+}
+button:active, button:focus, .button-default:active, .button-default:hover {
+  outline: none;
+  transition: box-shadow 0.2s;
+  box-shadow: 6px 6px 0px #333333;
+}
+button.danger {
+  background-color: #cb4154;
+}

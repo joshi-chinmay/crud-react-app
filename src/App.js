@@ -1,46 +1,72 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import axios from 'axios';
+import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 import Table from "./components/table";
 import Profile from "./components/profile";
-import uuid from "./helpers/uuid";
 
 import "./styles/defaults.css";
 import "./styles/table.css";
-import "./styles/button.css";
+import "./styles/form.css";
 
 function App() {
-  const [indexDB, setIndexDB] = useState([]);
+  const history = useHistory();
+  const [globalDB, setGlobalDB] = useState([]);
+  const API_URL = "https://swapi.dev/api/people/";
 
   useEffect(() => {
-    axios.get("https://swapi.dev/api/people/")
+    axios.get(API_URL)
       .then(response => {
-        let data = response.data.results;
-        data.map(o => o.uuid = uuid());
+        const data = _.map(response.data.results,  function(o) {
+          o.uuid = uuidv4();
+          return o;
+        });
 
-        setIndexDB(data);
+        setGlobalDB(data);
       })
       .catch(error => {
         console.error("Failed to fetch from - https://swapi.dev/api/people/. Backtrace: ", error);
-      })
+      });
   }, []);
 
+  function updateProfile(profile) {
+    let newProfiles = globalDB;
+    const profileIndex = _.findIndex(newProfiles, { 'uuid': profile.uuid });
+    _.remove(newProfiles, { 'uuid': profile.uuid });
+    newProfiles.splice(profileIndex, 0, profile);
+    setGlobalDB(newProfiles);
+    history.push("/");
+  };
+
+  function deleteProfile(uuid) {
+    let newProfiles = globalDB;
+    _.remove(newProfiles, { 'uuid': uuid });
+    setGlobalDB(newProfiles);
+    history.push("/");
+  }
+
   return (
-    <Router>
-      <div className="App">
-        <Link to="/"> Home </Link>
-
-        <Switch>
-          <Route exact path="/">
-            <Table indexDB={indexDB} />
-          </Route>
-
-          <Route exact path="/profile" component={Profile} />
-        </Switch>
+    <div className="container">
+      <div className="menu">
+        <Link className="link-left" to="/">Home</Link>
+        <a className="link-right" href="https://github.com/joshi-chinmay/crud-react-app" target="_blank" rel="noreferrer">GitHub</a>
+        <a className="link-right" href="https://chinmay-joshi.com/" target="_blank" rel="noreferrer">Website</a>
       </div>
-    </Router>
+
+      <Switch>
+        <Route exact path="/">
+          <Table globalDB={globalDB} deleteProfile={deleteProfile} />
+        </Route>
+
+        <Route exact path="/profiles/:uuid">
+          <Profile globalDB={globalDB} updateProfile={updateProfile} />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 
-export default App;
+export default withRouter(App);
